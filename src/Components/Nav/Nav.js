@@ -6,11 +6,11 @@ class Nav extends Component {
     
 
     render(props) {
-        const{username,pic} = this.props.user
+        const{username,profilePic} = this.props.user
         return (
 
             <div>
-                <img src={pic} alt='Profile Pic'/>
+                <img src={profilePic} alt='Profile Pic'/>
                 <p>{username}</p>
                 <Link to='/dashboard'>Home</Link>
                 <Link to='new'>New Post</Link>
