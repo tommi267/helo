@@ -2,11 +2,11 @@ const bcrypt = require('bcrypt')
 
 module.exports = {
     register: async (req, res) => {
-        const db = req.app.get('db')
         const {username, password} = req.body
+        const db = req.app.get('db')
 
-        const existingUser = (await db.check_user(username))[0]
-        if(existingUser){
+        const existingUser = await db.check_user(username)
+        if(existingUser[0]){
             return res.status(409).send('User already exists')
         }
 
@@ -14,35 +14,35 @@ module.exports = {
         const hash = bcrypt.hashSync(password, salt)
         const profilePic = `https://robohash.org/${username}`
 
-        const newUser = (await db.register_user([username, hash, profilePic]))[0]
+        const newUser = await db.register_user([username, hash, profilePic])
 
         req.session.user = {
-            userId: newUser.id,
-            username: newUser.username,
-            profilePic: newUser.profile_pic 
+            userId: newUser[0].id,
+            username: newUser[0].username,
+            profilePic: newUser[0].profile_pic 
         }
         res.status(200).send(req.session.user)
      },
     login: async (req, res) => {
-        const db = req.app.get('db')
-        const {username, password} = req.body
+         const {username, password} = req.body
+         const db = req.app.get('db')       
 
-        const user = (await db.check_user(username))[0]
+        const user = await db.check_user(username)
 
-        if(!user){
+        if(!username[0]){
             return res.status(404).send('User does not exist')
         }
-        const authenticated = bcrypt.compareSync(password, user.password)
-        if (authenticated || password === user.password) {
+        const authenticated = bcrypt.compareSync(password, user[0].password)
+        if (authenticated){
             req.session.user = {
-                userId: user.id,
-                username: user.username,
-                profilePic: user.profile_pic
+                userId: user[0].id,
+                username: user[0].username,
+                profilePic: user[0].profile_pic
             }
             res.status(200).send(req.session.user)
-
-        }
+        }else{
         res.status(403).send('Username or password incorrect')
+        }
     },
     logout: (req, res) => {
         req.session.destroy()

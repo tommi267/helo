@@ -18,6 +18,7 @@ class Auth extends Component {
         })
     }
     register = (e) => {
+        e.preventDefault()
         const {username, password} = this.state
         axios.post('/auth/register', {username, password})
         .then(res => {
@@ -29,6 +30,7 @@ class Auth extends Component {
     }
 
     login = (e) => {
+        e.preventDefault()
         const {username, password} = this.state
         axios.post('/auth/login', {username, password})
         .then(res => {

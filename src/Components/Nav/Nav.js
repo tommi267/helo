@@ -6,7 +6,7 @@ import {logoutUser} from '../../ducks/reducer'
 import {withRouter} from 'react-router-dom'
 
 class Nav extends Component {
-    logout = () => {
+    logout = (e) => {
         axios.post('/auth/logout')
         .then(() => {
             this.props.logoutUser()

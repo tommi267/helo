@@ -3,8 +3,8 @@ const express = require('express'),
       session = require('express-session'),
       massive = require('massive'),
       ctrl = require('./controller'),
-      {SERVER_PORT,SESSION_SECRET, CONNECTION_STRING} = process.env
-      app = express (),
+      {SERVER_PORT,SESSION_SECRET, CONNECTION_STRING} = process.env,
+      app = express ()
 
 app.use(express.json())
 app.use(
